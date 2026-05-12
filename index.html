@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgencyFlow CRM Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Inter', sans-serif;
+    }
+
+    body{
+      background:#f4f7fb;
+      display:flex;
+      color:#222;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar{
+      width:260px;
+      height:100vh;
+      background:#111827;
+      color:white;
+      padding:25px;
+      position:fixed;
+      left:0;
+      top:0;
+    }
+
+    .sidebar h2{
+      margin-bottom:40px;
+      color:#60a5fa;
+    }
+
+    .sidebar ul{
+      list-style:none;
+    }
+
+    .sidebar ul li{
+      margin-bottom:18px;
+    }
+
+    .sidebar ul li a{
+      color:#d1d5db;
+      text-decoration:none;
+      font-size:16px;
+      transition:0.3s;
+    }
+
+    .sidebar ul li a:hover{
+      color:white;
+    }
+
+    /* MAIN CONTENT */
+
+    .main-content{
+      margin-left:260px;
+      width:calc(100% - 260px);
+      padding:30px;
+    }
+
+    /* HEADER */
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:30px;
+    }
+
+    .topbar h1{
+      font-size:28px;
+    }
+
+    .topbar input{
+      padding:12px 18px;
+      border:none;
+      border-radius:10px;
+      width:250px;
+      background:white;
+      box-shadow:0 2px 8px rgba(0,0,0,0.08);
+      outline:none;
+    }
+
+    /* SUMMARY CARDS */
+
+    .summary-cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+      margin-bottom:35px;
+    }
+
+    .card{
+      background:white;
+      padding:25px;
+      border-radius:18px;
+      box-shadow:0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .card h3{
+      color:#6b7280;
+      margin-bottom:10px;
+      font-size:16px;
+    }
+
+    .card h2{
+      font-size:32px;
+      color:#111827;
+    }
+
+    /* LEAD PIPELINE */
+
+    .pipeline{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:20px;
+      margin-bottom:40px;
+    }
+
+    .pipeline-column{
+      background:white;
+      border-radius:18px;
+      padding:20px;
+      min-height:300px;
+      box-shadow:0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .pipeline-column h3{
+      margin-bottom:20px;
+      font-size:18px;
+    }
+
+    .lead-card{
+      background:#f9fafb;
+      padding:15px;
+      border-radius:12px;
+      margin-bottom:15px;
+      border-left:5px solid #60a5fa;
+    }
+
+    .lead-card h4{
+      margin-bottom:5px;
+    }
+
+    .lead-card p{
+      font-size:14px;
+      color:#6b7280;
+    }
+
+    /* CLIENT TABLE */
+
+    .table-section{
+      background:white;
+      padding:25px;
+      border-radius:18px;
+      box-shadow:0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom:40px;
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    table th,
+    table td{
+      text-align:left;
+      padding:15px;
+      border-bottom:1px solid #eee;
+    }
+
+    table th{
+      color:#6b7280;
+      font-size:14px;
+    }
+
+    .status{
+      padding:6px 12px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .active{
+      background:#dcfce7;
+      color:#16a34a;
+    }
+
+    .pending{
+      background:#fef3c7;
+      color:#ca8a04;
+    }
+
+    /* TASKS */
+
+    .tasks{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+    }
+
+    .task-card{
+      background:white;
+      padding:20px;
+      border-radius:18px;
+      box-shadow:0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .task-card h4{
+      margin-bottom:10px;
+    }
+
+    .task-card p{
+      color:#6b7280;
+      margin-bottom:15px;
+      font-size:14px;
+    }
+
+    .task-card button{
+      padding:10px 18px;
+      border:none;
+      border-radius:10px;
+      background:#2563eb;
+      color:white;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .task-card button:hover{
+      background:#1d4ed8;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:1000px){
+
+      .pipeline{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+    }
+
+    @media(max-width:768px){
+
+      body{
+        flex-direction:column;
+      }
+
+      .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+      }
+
+      .main-content{
+        margin-left:0;
+        width:100%;
+      }
+
+      .pipeline{
+        grid-template-columns:1fr;
+      }
+
+      .topbar{
+        flex-direction:column;
+        gap:15px;
+        align-items:flex-start;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <h2>AgencyFlow CRM</h2>
+
+    <ul>
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Leads</a></li>
+      <li><a href="#">Clients</a></li>
+      <li><a href="#">Tasks</a></li>
+      <li><a href="#">Analytics</a></li>
+      <li><a href="#">Team</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+      <h1>CRM Dashboard</h1>
+
+      <input type="text" placeholder="Search clients or leads...">
+
+    </div>
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="summary-cards">
+
+      <div class="card">
+        <h3>Total Leads</h3>
+        <h2>145</h2>
+      </div>
+
+      <div class="card">
+        <h3>Active Clients</h3>
+        <h2>38</h2>
+      </div>
+
+      <div class="card">
+        <h3>Pending Tasks</h3>
+        <h2>12</h2>
+      </div>
+
+      <div class="card">
+        <h3>Monthly Revenue</h3>
+        <h2>$12K</h2>
+      </div>
+
+    </div>
+
+    <!-- LEAD PIPELINE -->
+
+    <h2 style="margin-bottom:20px;">Lead Pipeline</h2>
+
+    <div class="pipeline">
+
+      <div class="pipeline-column">
+        <h3>New Leads</h3>
+
+        <div class="lead-card">
+          <h4>ABC Solutions</h4>
+          <p>Website Development</p>
+        </div>
+
+        <div class="lead-card">
+          <h4>Pixel Agency</h4>
+          <p>SEO Services</p>
+        </div>
+
+      </div>
+
+      <div class="pipeline-column">
+        <h3>Contacted</h3>
+
+        <div class="lead-card">
+          <h4>Bright Media</h4>
+          <p>Social Media Marketing</p>
+        </div>
+
+      </div>
+
+      <div class="pipeline-column">
+        <h3>Proposal Sent</h3>
+
+        <div class="lead-card">
+          <h4>CodeCraft</h4>
+          <p>CRM Dashboard Design</p>
+        </div>
+
+      </div>
+
+      <div class="pipeline-column">
+        <h3>Converted</h3>
+
+        <div class="lead-card">
+          <h4>Vision Tech</h4>
+          <p>Mobile App Development</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CLIENT TABLE -->
+
+    <div class="table-section">
+
+      <h2 style="margin-bottom:20px;">Client List</h2>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Manager</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Vision Tech</td>
+            <td>Mobile App UI</td>
+            <td><span class="status active">Active</span></td>
+            <td>John</td>
+          </tr>
+
+          <tr>
+            <td>Bright Media</td>
+            <td>SEO Campaign</td>
+            <td><span class="status pending">Pending</span></td>
+            <td>Sarah</td>
+          </tr>
+
+          <tr>
+            <td>ABC Solutions</td>
+            <td>Website Redesign</td>
+            <td><span class="status active">Active</span></td>
+            <td>David</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- TASKS -->
+
+    <h2 style="margin-bottom:20px;">Upcoming Tasks</h2>
+
+    <div class="tasks">
+
+      <div class="task-card">
+        <h4>Follow-Up Call</h4>
+        <p>Call Bright Media regarding proposal approval.</p>
+        <button>Mark Complete</button>
+      </div>
+
+      <div class="task-card">
+        <h4>Client Meeting</h4>
+        <p>Discuss project updates with Vision Tech.</p>
+        <button>Mark Complete</button>
+      </div>
+
+      <div class="task-card">
+        <h4>Send Invoice</h4>
+        <p>Send monthly invoice to ABC Solutions.</p>
+        <button>Mark Complete</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
